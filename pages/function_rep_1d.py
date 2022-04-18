@@ -150,3 +150,31 @@ def rep_1D_function_page(st, **state):
     x_tf = tf.constant(x_t,dtype=float)
     y_tf = tf.constant(y,dtype=float)
     trainable_vars = model.trainable_variables
+
+    st.header('Training execution')
+
+    losses =[]
+
+    
+    if st.checkbox('Execute Training'):
+        my_bar = st.progress(0)
+        for ix in range(epochs):
+            with tf.GradientTape(persistent=True) as tape:
+                tape.watch(x_tf)
+                tape.watch(trainable_vars)
+                f_x =  model(x_tf,training=True)
+                t_loss = (y_tf -f_x)**2
+                loss  =  tf.reduce_mean(t_loss)
+                if ix == 0:
+                    st.write('Initial loss = '+str(loss.numpy())  )
+                if ix == epochs-1:
+                    st.write('Final loss = '+str(loss.numpy())  )
+                tape.watch(loss)
+
+            gradients = tape.gradient(loss, trainable_vars)
+            Adam.apply_gradients(zip(gradients, trainable_vars))
+            losses.append(loss.numpy())
+            my_bar.progress(round(ix/epochs)*100)
+        st.success('TRAINING ENDED!')
+
+    
