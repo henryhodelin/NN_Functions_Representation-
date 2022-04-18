@@ -8,7 +8,7 @@ def footer(st):
 
 
 def header(st):
-    st.title("Neural Network Representation")
+    st.title("Neural Network Function Representation")
 
 
 app = MultiPage()

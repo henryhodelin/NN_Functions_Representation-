@@ -96,3 +96,57 @@ def rep_1D_function_page(st, **state):
         st.header("Function Graph")
         fig = go.Figure(data=go.Scatter(x=x, y=y,name='f(x)'))
         st.plotly_chart(fig, use_container_width=True)
+
+
+    st.header("Neural Network Specifications")
+    st.write("(SINGLE LAYER FEEDFORWARD NEURAL NETWORK)")
+
+    class MyDenseLayer(tf.keras.layers.Layer):
+        def __init__(self, num_outputs):
+            super(MyDenseLayer, self).__init__()
+            self.num_outputs = num_outputs
+            
+        def build(self, input_shape):
+            self.kernel = self.add_weight("kernel",
+            shape=[int(input_shape[-1]),self.num_outputs])
+    
+            self.biases = self.add_weight("kernel",shape=[ self.num_outputs])
+        
+        def call(self, input):
+            return tf.math.sigmoid(tf.math.add(tf.matmul(input, self.kernel),self.biases) )
+
+    
+    
+    
+
+    
+    col1, col2 = st.columns([1,1])
+    with col1:
+        N_Neurons  = st.slider('Number of neurons', 0, 200, 25)  
+
+    inputs = tf.keras.Input(name='inputs',shape=(1),dtype=tf.dtypes.float32)
+    hidden = MyDenseLayer(N_Neurons)
+    output = tf.keras.layers.Dense(1,activation=None,name='output')
+    model  = tf.keras.Sequential([inputs, hidden, output ])   
+
+    st.header("Training Parameters")
+    st.write("(ADAM OPTIMIZER)")
+
+    Col1, Col2 = st.columns([1,1])
+    with Col1:
+        epochs_units  = st.slider('Epoch units', 0, 9, 1,key = '1')
+        epochs_power  = st.slider('Epoch power', 0, 9, 5,key = '2')
+        epochs = epochs_units*10**epochs_power
+        st.write('Epoch selected = '+str(epochs)) 
+
+    with Col2:
+        learning_rate_units = st.slider('Learning rate units', 0, 9, 1,key = '3')
+        learning_rate_power = st.slider('Learning rate power', -9, -1, -3,key = '3')
+        learning_rate_selected = learning_rate_units*10**learning_rate_power
+        st.write('Learning rate = '+str(learning_rate_selected))
+
+    Adam   = tf.keras.optimizers.Adam(learning_rate=learning_rate_selected, beta_1=0.9, beta_2=0.999, epsilon=1e-07)    
+
+    x_tf = tf.constant(x_t,dtype=float)
+    y_tf = tf.constant(y,dtype=float)
+    trainable_vars = model.trainable_variables
