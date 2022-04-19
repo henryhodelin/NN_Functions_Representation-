@@ -178,3 +178,4 @@ def rep_1D_function_page(st, **state):
         st.success('TRAINING ENDED!')
 
     
+    st.write('Testing change in development')
