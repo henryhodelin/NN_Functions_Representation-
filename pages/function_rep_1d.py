@@ -114,7 +114,8 @@ def rep_1D_function_page(st, **state):
             self.biases = self.add_weight("kernel",shape=[ self.num_outputs])
         
         def call(self, input):
-            return tf.math.sigmoid(tf.math.add(tf.matmul(input, self.kernel),self.biases) )
+            #return tf.math.sigmoid(tf.math.add(tf.matmul(input, self.kernel),self.biases) )
+            return tf.nn.relu(tf.math.add(tf.matmul(input, self.kernel),self.biases) )
 
     
     
