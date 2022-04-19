@@ -197,5 +197,20 @@ def rep_1D_function_page(st, **state):
             my_bar.progress(round(ix/epochs)*100)
         st.success('TRAINING ENDED!')
 
+        y_tf =  model(x_tf)
+        y_NN = np.squeeze(y_tf.numpy())
+
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=x, y=y,
+                    line = dict(color='royalblue', width=4, dash='dash'),
+                    name='function'))
+        fig.add_trace(go.Scatter(x=x, y=z,
+                    mode='lines',
+                    name='NN output'))
+
+
+        #fig = go.Figure(data=go.Scatter(x=x, y=y,name='f(x)'))
+        st.plotly_chart(fig, use_container_width=True)
+
     
     st.write('Testing change in development')
