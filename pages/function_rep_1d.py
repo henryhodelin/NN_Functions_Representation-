@@ -91,11 +91,12 @@ def rep_1D_function_page(st, **state):
 
             """ )
         st.button('Clear')    
-
     with col2:
-        st.header("Function Graph")
+        st.header('Function Graph')
         fig = go.Figure(data=go.Scatter(x=x, y=y,name='f(x)'))
         st.plotly_chart(fig, use_container_width=True)
+
+        
 
 
     st.header("Neural Network Specifications")
@@ -120,14 +121,33 @@ def rep_1D_function_page(st, **state):
     
 
     
-    col1, col2 = st.columns([1,1])
+    col1, col2 = st.columns([1,2])
     with col1:
-        N_Neurons  = st.slider('Number of neurons', 0, 200, 25)  
-
+        N_Neurons  = st.slider('Number of neurons', 0, 200, 25)
+    
     inputs = tf.keras.Input(name='inputs',shape=(1),dtype=tf.dtypes.float32)
     hidden = MyDenseLayer(N_Neurons)
     output = tf.keras.layers.Dense(1,activation=None,name='output')
-    model  = tf.keras.Sequential([inputs, hidden, output ])   
+    model  = tf.keras.Sequential([inputs, hidden, output ])  
+
+
+    st.header("Initial Neural Network Output")
+
+    x_tf = tf.constant(x_t,dtype=float)
+    z_tf =  model(x_tf)
+    z = np.squeeze(z_tf.numpy())
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x, y=y,
+                    line = dict(color='royalblue', width=4, dash='dash'),
+                    name='function'))
+    fig.add_trace(go.Scatter(x=x, y=z,
+                    mode='lines',
+                    name='NN output'))
+
+
+    #fig = go.Figure(data=go.Scatter(x=x, y=y,name='f(x)'))
+    st.plotly_chart(fig, use_container_width=True)
 
     st.header("Training Parameters")
     st.write("(ADAM OPTIMIZER)")
@@ -135,7 +155,7 @@ def rep_1D_function_page(st, **state):
     Col1, Col2 = st.columns([1,1])
     with Col1:
         epochs_units  = st.slider('Epoch units', 0, 9, 1,key = '1')
-        epochs_power  = st.slider('Epoch power', 0, 9, 5,key = '2')
+        epochs_power  = st.slider('Epoch power', 0, 9, 2,key = '2')
         epochs = epochs_units*10**epochs_power
         st.write('Epoch selected = '+str(epochs)) 
 
