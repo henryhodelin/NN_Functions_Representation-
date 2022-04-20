@@ -209,7 +209,7 @@ def rep_1D_function_page(st, **state):
         fig.add_trace(go.Scatter(x=x, y=y,
                     line = dict(color='royalblue', width=4, dash='dash'),
                     name='function'))
-        fig.add_trace(go.Scatter(x=x, y=z,
+        fig.add_trace(go.Scatter(x=x, y=y_NN,
                     mode='lines',
                     name='NN output'))
 
