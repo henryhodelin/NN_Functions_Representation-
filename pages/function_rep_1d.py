@@ -188,6 +188,10 @@ def rep_1D_function_page(st, **state):
                 loss  =  tf.reduce_mean(t_loss)
                 if ix == 0:
                     st.write('Initial loss = '+str(loss.numpy())  )
+                    min_loss = loss.numpy()
+                else:
+                    if loss.numpy() < min_loss:
+                        min_loss = loss.numpy()
                 if ix == epochs-1:
                     st.write('Final loss = '+str(loss.numpy())  )
                 tape.watch(loss)
@@ -196,7 +200,7 @@ def rep_1D_function_page(st, **state):
             Adam.apply_gradients(zip(gradients, trainable_vars))
             losses.append(loss.numpy())
             my_bar.progress(round(ix/epochs)*100)
-        st.success('TRAINING ENDED!')
+        st.success('TRAINING ENDED! '+' Min Loss = '+str(min_loss))
 
         y_tf =  model(x_tf)
         y_NN = np.squeeze(y_tf.numpy())
@@ -214,4 +218,4 @@ def rep_1D_function_page(st, **state):
         st.plotly_chart(fig, use_container_width=True)
 
     
-    st.write('Testing change in development')
+    
