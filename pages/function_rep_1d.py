@@ -199,7 +199,7 @@ def rep_1D_function_page(st, **state):
             gradients = tape.gradient(loss, trainable_vars)
             Adam.apply_gradients(zip(gradients, trainable_vars))
             losses.append(loss.numpy())
-            my_bar.progress(round(ix/epochs)*100)
+            my_bar.progress(round(((ix+1)/epochs)*100))
         st.success('TRAINING ENDED! '+' Min Loss = '+str(min_loss))
 
         y_tf =  model(x_tf)
